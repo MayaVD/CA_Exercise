@@ -2,7 +2,7 @@
 1647251801 /users/students/r0745720/Documents/CA_Exercise/RTL/alu_control.v
 1646668034 /users/students/r0745720/Documents/CA_Exercise/RTL/branch_unit.v
 1646672470 /users/students/r0745720/Documents/CA_Exercise/RTL/control_unit.v
-1647251842 /users/students/r0745720/Documents/CA_Exercise/RTL/cpu.v
+1647263347 /users/students/r0745720/Documents/CA_Exercise/RTL/cpu.v
 1646668034 /users/students/r0745720/Documents/CA_Exercise/RTL/immediate_extend_unit.v
 1646668034 /users/students/r0745720/Documents/CA_Exercise/RTL/mux_2.v
 1646668034 /users/students/r0745720/Documents/CA_Exercise/RTL/pc.v

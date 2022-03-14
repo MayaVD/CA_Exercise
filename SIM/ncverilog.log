@@ -1,5 +1,5 @@
 ncverilog(64): 15.20-s058: (c) Copyright 1995-2018 Cadence Design Systems, Inc.
-TOOL:	ncverilog	15.20-s058: Started on Mar 14, 2022 at 10:57:30 CET
+TOOL:	ncverilog	15.20-s058: Started on Mar 14, 2022 at 14:09:10 CET
 ncverilog
 	+sv
 	-f files_verilog.f
@@ -21,9 +21,9 @@ ncverilog
 	+nctimescale+1ns/10ps
 	+access+rwc
 	-ALLOWREDEFINITION
-Recompiling... reason: file '../RTL/alu_control.v' is newer than expected.
-	expected: Mon Mar 14 10:44:16 2022
-	actual:   Mon Mar 14 10:56:41 2022
+Recompiling... reason: file '../RTL/cpu.v' is newer than expected.
+	expected: Mon Mar 14 13:49:44 2022
+	actual:   Mon Mar 14 14:09:07 2022
 file: ../RTL/cpu.v
 	module worklib.cpu:v
 		errors: 0, warnings: 0
@@ -188,48 +188,131 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,4245|20): text macro 'wordLength' red
 		errors: 0, warnings: 52
 		Caching library 'worklib' ....... Done
 	Elaborating the design hierarchy:
-ncelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
-	Building instance overlay tables: .................... Done
-	Generating native compiled code:
-		worklib.alu_control:v <0x493c55e7>
-			streams:   3, words:   945
-		worklib.control_unit:v <0x5182b77c>
-			streams:   1, words:  6521
-		worklib.cpu:v <0x193aa276>
-			streams:   9, words:  1229
-		worklib.cpu_tb:v <0x26cfb496>
-			streams:  27, words: 53186
-		worklib.immediate_extend_unit:v <0x013d814d>
-			streams:   2, words:  3075
-		worklib.register_file:v <0x7a425b1b>
-			streams:   5, words: 28015
-		worklib.sram_BW32:v <0x248c010f>
-			streams:  14, words:  5257
-	Building instance specific data structures.
-	Loading native compiled code:     .................... Done
-	Design hierarchy summary:
-		                   Instances  Unique
-		Modules:                1772      84
-		Primitives:             5220       1
-		Registers:              7016     233
-		Scalar wires:          12297       -
-		Expanded wires:         1280      40
-		Vectored wires:          130       -
-		Always blocks:          6606     190
-		Initial blocks:            3       3
-		Cont. assignments:         2       5
-		Pseudo assignments:     5411     155
-		Simulation timescale:  100fs
-	Writing initial simulation snapshot: worklib.reg_arstn:v
-Loading snapshot worklib.reg_arstn:v .................... Done
-ncsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
-ncsim> source /esat/micas-data/software/Cadence/incisiv_15.20.058/tools/inca/files/ncsimrc
-ncsim> run
-[1;34m
-Mult2 Working Correctly
-[0m
-         40 cycles
-Simulation complete via $finish(1) at time 160450 NS + 7
-../RTL/cpu_tb.v:319    $finish;
-ncsim> exit
-TOOL:	ncverilog	15.20-s058: Exiting on Mar 14, 2022 at 10:57:32 CET  (total: 00:00:02)
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,113|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (instruction_IF_ID)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,114|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,124|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (reg_write_IF_ID)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,125|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,135|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (alu_src_IF_ID )
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,136|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,146|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (alu_op_IF_ID  )
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,147|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,157|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (updated_pc_IF_ID)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,158|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,195|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (immediate_extended_ID_EXE)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,196|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,206|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (regfile_rdata_1_ID_EXE)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,207|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,217|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (regfile_rdata_2_ID_EXE)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,218|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,228|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (instruction_ID_EXE)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,229|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,239|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (alu_src_ID_EXE)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,240|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,250|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (alu_op_ID_EXE )
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,251|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,261|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (updated_pc_ID_EXE)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,262|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,310|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (branch_pc_EXE_IF)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,311|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,320|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (jump_pc_EXE_IF)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,321|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,330|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (zero_flag_EXE_IF)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,331|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,342|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (alu_out_EXE_MEM)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,343|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,353|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (regfile_rdata_2_EXE_MEM)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,354|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,364|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (instruction_EXE_MEM)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,365|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,396|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (alu_out_MEM_WB)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,397|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,407|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (mem_data_MEM_WB)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,408|8): Port name 'd_out' is invalid or has multiple connections.
+   .en       (enable        ),
+     |
+ncelab: *E,CUVPOM (../RTL/cpu.v,417|5): Port name 'en' is invalid or has multiple connections.
+   .d_out    (instruction_MEM_WB)
+        |
+ncelab: *E,CUVPOM (../RTL/cpu.v,418|8): Port name 'd_out' is invalid or has multiple connections.
+ncverilog: *E,ELBERR: Error during elaboration (status 1), exiting.
+TOOL:	ncverilog	15.20-s058: Exiting on Mar 14, 2022 at 14:09:10 CET  (total: 00:00:00)

@@ -9,7 +9,7 @@
 1646668034 /users/students/r0745720/Documents/CA_Exercise/RTL/sram.v
 1646667933 /users/students/r0758052/Documents/CA_Exercise/RTL/saed32sram_mod.v
 1646667933 /users/students/r0758052/Documents/CA_Exercise/RTL/pc.v
-1647251842 /users/students/r0745720/Documents/CA_Exercise/RTL/cpu.v
+1647263347 /users/students/r0745720/Documents/CA_Exercise/RTL/cpu.v
 1646673504 /users/students/r0758052/Documents/CA_Exercise/RTL/control_unit.v
 1646668034 /users/students/r0745720/Documents/CA_Exercise/RTL/reg_arstn_en.v
 1646667933 /users/students/r0758052/Documents/CA_Exercise/RTL/reg_arstn.v
