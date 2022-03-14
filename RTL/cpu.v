@@ -72,6 +72,9 @@ pc #(
    .updated_pc(updated_pc)
 );
 
+// IF STAGE
+wire [31:0] instruction_IF_ID, instruction_MEM_WB;
+
 // The instruction memory.
 sram_BW32 #(
    .ADDR_W(9 ),
@@ -89,6 +92,19 @@ sram_BW32 #(
    .wdata_ext(wdata_ext     ),
    .rdata_ext(rdata_ext     )
 );
+
+// IF_ID Pipeline register instruction signal
+reg_arstn#(
+   .DATA_W(32) // width of the forwarded signal
+)signal_pipe_IF_ID(
+   .clk      (clk           ),
+   .arst_n   (arst_n        ),
+   .din      (instruction   ),
+   .en       (enable        ),
+   .d_out    (instruction_IF_ID)
+)
+
+// ID STAGE
 
 // The data memory.
 sram_BW64 #(
