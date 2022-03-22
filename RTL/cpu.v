@@ -65,8 +65,8 @@ pc #(
    .branch_pc (branch_pc_EXE_IF),
    .jump_pc   (jump_pc_EXE_IF),
    .zero_flag (zero_flag_EXE_IF),
-   .branch    (control_EXE_MEM[2]),
-   .jump      (control_EXE_MEM[8]),
+   .branch    (control_EXE_MEM[3]),
+   .jump      (control_EXE_MEM[9]),
    .current_pc(current_pc), // output
    .enable    (enable    ),
    .updated_pc(updated_pc)
@@ -90,20 +90,7 @@ sram_BW32 #(
    .rdata_ext(rdata_ext     ) // output
 );
 
-control_unit control_unit(
-   .opcode   (instruction[6:0]),
-   .alu_op   (alu_op          ), // output
-   .reg_dst  (reg_dst         ),
-   .branch   (branch          ),
-   .mem_read (mem_read        ),
-   .mem_2_reg(mem_2_reg       ),
-   .mem_write(mem_write       ),
-   .alu_src  (alu_src         ),
-   .reg_write(reg_write       ),
-   .jump     (jump            )
-);
-
-// IF_ID Pipeline register instruction signal
+// IF_ID Pipeline register instruction signaluction_IF_ID
 wire [31:0] instruction_IF_ID;
 reg_arstn_en#(
    .DATA_W(32) // width of the forwarded signal
@@ -126,17 +113,6 @@ reg_arstn_en#(
    .dout    (updated_pc_IF_ID)
 );
 
-wire [9:0] control_IF_ID;
-reg_arstn_en#(
-   .DATA_W(10) // width of the forwarded signal
-)signal_pipe_IF_ID_control(
-   .clk      (clk           ),
-   .arst_n   (arst_n        ),
-   .din      ({alu_op, reg_dst, branch, mem_read, mem_2_reg, mem_write, alu_src, reg_write, jump}),
-   .en       (enable        ),
-   .dout    (control_IF_ID  )
-);
-
 // ID STAGE
 // -----------------------------------------------------------
 wire signed [63:0] immediate_extended;
@@ -144,6 +120,19 @@ wire signed [63:0] regfile_rdata_1,regfile_rdata_2;
 wire [63:0] regfile_wdata;
 wire [31:0] instruction_MEM_WB;
 wire [9:0]  control_MEM_WB;
+
+control_unit control_unit(
+   .opcode   (instruction_IF_ID[6:0]),
+   .alu_op   (alu_op          ), // output
+   .reg_dst  (reg_dst         ),
+   .branch   (branch          ),
+   .mem_read (mem_read        ),
+   .mem_2_reg(mem_2_reg       ),
+   .mem_write(mem_write       ),
+   .alu_src  (alu_src         ),
+   .reg_write(reg_write       ),
+   .jump     (jump            )
+);
 
 register_file #(
    .DATA_W(64)
@@ -227,9 +216,9 @@ reg_arstn_en#(
 )signal_pipe_ID_EXE_control(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      (control_IF_ID ),
+   .din      ({alu_op, reg_dst, branch, mem_read, mem_2_reg, mem_write, alu_src, reg_write, jump}),
    .en       (enable        ),
-   .dout    (control_ID_EXE)
+   .dout    (control_ID_EXE  )
 );
 
 // EXE STAGE
