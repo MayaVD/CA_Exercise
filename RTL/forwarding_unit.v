@@ -1,11 +1,33 @@
-// 6 inputs 2 outputs still to be implemented
+
 module forwarding_unit(
-      input  wire [6:0] opcode,
-      input reg  [1:0] alu_op,
-      input reg        reg_dst,
-      input reg        branch,
-      input reg        mem_read,
-      input reg        mem_2_reg,
-      output reg        mem_write,
-      output reg        alu_src,
+      input reg [31:0] instruction_EX,
+      input reg [31:0] instruction_MEM,
+      input reg [31:0] instruction_WB,
+	  input reg		   RegWrite_MEM,
+	  input reg		   RegWrite_WB,
+      output reg [1:0]      sel_reg1,
+      output reg [1:0]      sel_reg2
    );
+
+always @(*) begin
+
+	assign sel_reg1 = 2'd0;
+	assign sel_reg2 = 2'd0;
+
+	if (RegWrite_MEM == 1'b1 && instruction_MEM[11:7] == instruction_EX[19:15]) begin
+		assign sel_reg1 = 2'd1;
+	end
+	if (RegWrite_MEM == 1'b1 && instruction_MEM[11:7] == instruction_EX[24:20] ) begin
+		assign sel_reg2 = 2'd1;
+	end
+
+	if (RegWrite_WB == 1'b1 && instruction_WB[11:7] == instruction_EX[19:15]) begin
+		assign sel_reg1 = 2'd2;
+	end
+	if (RegWrite_WB == 1'b1 && instruction_WB[11:7] == instruction_EX[24:20] ) begin
+		assign sel_reg2 = 2'd2;
+	end
+
+end
+
+endmodule

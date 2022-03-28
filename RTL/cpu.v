@@ -223,12 +223,38 @@ reg_arstn_en#(
 
 // EXE STAGE
 // -----------------------------------------------------------
+wire [1:0] sel_reg1;
+wire [1:0] sel_reg2;
+
+wire [63:0] alu_mux_out;
 mux_2 #(
    .DATA_W(64)
 ) alu_operand_mux (
    .input_a (immediate_extended_ID_EXE),
    .input_b (regfile_rdata_2_ID_EXE),
    .select_a(control_ID_EXE[7] ),
+   .mux_out (alu_mux_out     ) // output
+);
+
+wire [63:0] alu_out_EXE_MEM;
+wire [63:0] alu_operand_1;
+mux_3 #(
+   .DATA_W(64)
+) alu_forw_mux1 (
+   .input_a (regfile_rdata_1_ID_EXE),
+   .input_b (alu_out_EXE_MEM),
+   .input_c (regfile_wdata),
+   .select  (sel_reg1 ),
+   .mux_out (alu_operand_1     ) // output
+);
+
+mux_3 #(
+   .DATA_W(64)
+) alu_forw_mux2 (
+   .input_a (alu_mux_out),
+   .input_b (alu_out_EXE_MEM),
+   .input_c (regfile_wdata),
+   .select  (sel_reg2 ),
    .mux_out (alu_operand_2     ) // output
 );
 
@@ -242,7 +268,7 @@ alu_control alu_ctrl(
 alu#(
    .DATA_W(64)
 ) alu(
-   .alu_in_0 (regfile_rdata_1_ID_EXE),
+   .alu_in_0 (alu_operand_1),
    .alu_in_1 (alu_operand_2   ),
    .alu_ctrl (alu_control     ),
    .alu_out  (alu_out         ), // output
@@ -257,6 +283,17 @@ branch_unit#(
    .immediate_extended (immediate_extended_ID_EXE),
    .branch_pc          (branch_pc         ), // output
    .jump_pc            (jump_pc           )
+);
+
+wire [31:0] instruction_EXE_MEM;
+forwarding_unit forw_u(
+	.instruction_EX(instruction_ID_EXE),
+    .instruction_MEM(instruction_EXE_MEM),
+    .instruction_WB(instruction_MEM_WB),
+	.RegWrite_MEM(control_EXE_MEM[8]),
+	.RegWrite_WB(control_MEM_WB[8]),
+    .sel_reg1(sel_reg1),
+    .sel_reg2(sel_reg2)
 );
 
 // EXE_IF Pipeline signals
@@ -290,8 +327,8 @@ reg_arstn_en#(
    .dout    (zero_flag_EXE_IF)
 );
 
+
 // EXE_MEM Pipeline signals
-wire [63:0] alu_out_EXE_MEM;
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
 )signal_pipe_EXE_MEM_alu_out(
@@ -313,7 +350,7 @@ reg_arstn_en#(
    .dout    (regfile_rdata_2_EXE_MEM)
 );
 
-wire [31:0] instruction_EXE_MEM;
+
 reg_arstn_en#(
    .DATA_W(32) // width of the forwarded signal
 )signal_pipe_EXE_MEM_instruction(

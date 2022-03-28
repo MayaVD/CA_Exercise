@@ -20,6 +20,8 @@
 ../RTL/sram.v
 ../RTL/cpu_tb.v
 ../RTL/saed32sram_mod.v
+../RTL/mux_3.v
+../RTL/forwarding_unit.v
 -ALLOWREDEFINITION
 -CDSLIB
 ./INCA_libs/irun.lnx8664.15.20.nc/cdsrun.lib

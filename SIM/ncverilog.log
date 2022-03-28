@@ -1,5 +1,5 @@
 ncverilog(64): 15.20-s058: (c) Copyright 1995-2018 Cadence Design Systems, Inc.
-TOOL:	ncverilog	15.20-s058: Started on Mar 28, 2022 at 17:05:41 CEST
+TOOL:	ncverilog	15.20-s058: Started on Mar 28, 2022 at 18:06:01 CEST
 ncverilog
 	+sv
 	-f files_verilog.f
@@ -17,56 +17,13 @@ ncverilog
 		../RTL/sram.v
 		../RTL/cpu_tb.v
 		../RTL/saed32sram_mod.v
+		../RTL/mux_3.v
+		../RTL/forwarding_unit.v
 	+nc64bit
 	+nctimescale+1ns/10ps
 	+access+rwc
 	-ALLOWREDEFINITION
-file: ../RTL/alu.v
-	module worklib.alu:v
-		errors: 0, warnings: 0
-file: ../RTL/alu_control.v
-	module worklib.alu_control:v
-		errors: 0, warnings: 0
-file: ../RTL/branch_unit.v
-	module worklib.branch_unit:v
-		errors: 0, warnings: 0
-file: ../RTL/control_unit.v
-	module worklib.control_unit:v
-		errors: 0, warnings: 0
-file: ../RTL/cpu.v
-	module worklib.cpu:v
-		errors: 0, warnings: 0
-file: ../RTL/immediate_extend_unit.v
-	module worklib.immediate_extend_unit:v
-		errors: 0, warnings: 0
-file: ../RTL/mux_2.v
-	module worklib.mux_2:v
-		errors: 0, warnings: 0
-file: ../RTL/pc.v
-	module worklib.pc:v
-		errors: 0, warnings: 0
-file: ../RTL/reg_arstn.v
-	module worklib.reg_arstn:v
-		errors: 0, warnings: 0
-file: ../RTL/reg_arstn_en.v
-	module worklib.reg_arstn_en:v
-		errors: 0, warnings: 0
-file: ../RTL/register_file.v
-	module worklib.register_file:v
-		errors: 0, warnings: 0
-file: ../RTL/sram.v
-	module worklib.sram_BW32:v
-		errors: 0, warnings: 0
-	module worklib.sram_BW64:v
-		errors: 0, warnings: 0
-file: ../RTL/cpu_tb.v
-	module worklib.cpu_tb:v
-		errors: 0, warnings: 0
 file: ../RTL/saed32sram_mod.v
-	module worklib.SRAM1RW1024x8:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW1024x8_1bit:v
-		errors: 0, warnings: 0
 `define numAddr 7
                  |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,101|17): text macro 'numAddr' redefined - replaced with new definition.
@@ -76,24 +33,12 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,102|20): text macro 'numWords' redefi
 `define wordLength 46
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,103|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW128x46:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW128x46_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 48
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,229|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW128x48:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW128x48_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 8
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,357|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW128x8:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW128x8_1bit:v
-		errors: 0, warnings: 0
 `define numAddr 8
                  |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,443|17): text macro 'numAddr' redefined - replaced with new definition.
@@ -103,38 +48,18 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,444|20): text macro 'numWords' redefi
 `define wordLength 128
                       |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,445|22): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW256x128:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW256x128_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 32
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,653|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW256x32:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW256x32_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 46
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,765|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW256x46:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW256x46_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 48
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,891|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW256x48:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW256x48_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 8
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1019|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW256x8:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW256x8_1bit:v
-		errors: 0, warnings: 0
 `define numAddr 5
                  |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1105|17): text macro 'numAddr' redefined - replaced with new definition.
@@ -144,10 +69,6 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1106|19): text macro 'numWords' redef
 `define wordLength 50
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1107|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW32x50:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW32x50_1bit:v
-		errors: 0, warnings: 0
 `define numAddr 9
                  |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1235|17): text macro 'numAddr' redefined - replaced with new definition.
@@ -157,24 +78,12 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1236|20): text macro 'numWords' redef
 `define wordLength 128
                       |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1237|22): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW512x128:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW512x128_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 32
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1445|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW512x32:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW512x32_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 8
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1557|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW512x8:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW512x8_1bit:v
-		errors: 0, warnings: 0
 `define numAddr 6
                  |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1643|17): text macro 'numAddr' redefined - replaced with new definition.
@@ -184,31 +93,15 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1644|19): text macro 'numWords' redef
 `define wordLength 128
                       |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1645|22): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW64x128:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW64x128_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 32
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1853|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW64x32:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW64x32_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 34
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1965|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW64x34:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW64x34_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 8
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2079|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM1RW64x8:v
-		errors: 0, warnings: 0
-	module worklib.SRAM1RW64x8_1bit:v
-		errors: 0, warnings: 0
 `define numAddr 7
                  |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2165|17): text macro 'numAddr' redefined - replaced with new definition.
@@ -218,31 +111,15 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2166|20): text macro 'numWords' redef
 `define wordLength 16
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2167|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW128x16:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW128x16_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 32
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2288|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW128x32:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW128x32_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 4
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2425|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW128x4:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW128x4_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 8
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2534|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW128x8:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW128x8_1bit:v
-		errors: 0, warnings: 0
 `define numAddr 4
                  |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2645|17): text macro 'numAddr' redefined - replaced with new definition.
@@ -252,31 +129,15 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2646|19): text macro 'numWords' redef
 `define wordLength 16
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2647|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW16x16:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW16x16_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 32
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2768|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW16x32:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW16x32_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 4
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2905|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW16x4:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW16x4_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 8
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3014|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW16x8:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW16x8_1bit:v
-		errors: 0, warnings: 0
 `define numAddr 5
                  |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3125|17): text macro 'numAddr' redefined - replaced with new definition.
@@ -286,45 +147,21 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3126|19): text macro 'numWords' redef
 `define wordLength 16
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3127|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW32x16:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW32x16_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 22
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3248|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW32x22:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW32x22_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 32
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3375|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW32x32:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW32x32_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 39
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3512|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW32x39:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW32x39_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 4
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3656|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW32x4:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW32x4_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 8
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3765|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW32x8:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW32x8_1bit:v
-		errors: 0, warnings: 0
 `define numAddr 6
                  |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3876|17): text macro 'numAddr' redefined - replaced with new definition.
@@ -334,30 +171,17 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3877|19): text macro 'numWords' redef
 `define wordLength 16
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3878|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW64x16:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW64x16_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 32
                      |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3999|21): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW64x32:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW64x32_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 4
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,4136|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW64x4:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW64x4_1bit:v
-		errors: 0, warnings: 0
 `define wordLength 8
                     |
 ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,4245|20): text macro 'wordLength' redefined - replaced with new definition.
-	module worklib.SRAM2RW64x8:v
-		errors: 0, warnings: 0
-	module worklib.SRAM2RW64x8_1bit:v
+file: ../RTL/forwarding_unit.v
+	module worklib.forwarding_unit:v
 		errors: 0, warnings: 0
 	Total errors/warnings found outside modules and primitives:
 		errors: 0, warnings: 52
@@ -444,14 +268,18 @@ ncelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-
 			streams:   1, words:   490
 		worklib.control_unit:v <0x5182b77c>
 			streams:   1, words:  6521
-		worklib.cpu:v <0x330a6362>
+		worklib.cpu:v <0x38b35d97>
 			streams:  10, words:  1644
-		worklib.cpu_tb:v <0x6b351a83>
+		worklib.cpu_tb:v <0x7e2babb3>
 			streams:  27, words: 53186
+		worklib.forwarding_unit:v <0x38356a34>
+			streams:   7, words:  8756
 		worklib.immediate_extend_unit:v <0x013d814d>
 			streams:   2, words:  3075
 		worklib.mux_2:v <0x69a21794>
 			streams:   1, words:   432
+		worklib.mux_3:v <0x7533a334>
+			streams:   1, words:   652
 		worklib.pc:v <0x64f655be>
 			streams:   5, words:  1517
 		worklib.reg_arstn:v <0x3ac60968>
@@ -476,13 +304,13 @@ ncelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
 		                   Instances  Unique
-		Modules:                1791      84
+		Modules:                1794      86
 		Primitives:             5220       1
-		Registers:              7054     233
+		Registers:              7058     236
 		Scalar wires:          12298       -
 		Expanded wires:         1310      43
-		Vectored wires:          146       -
-		Always blocks:          6644     190
+		Vectored wires:          150       -
+		Always blocks:          6647     192
 		Initial blocks:            3       3
 		Cont. assignments:         2       5
 		Pseudo assignments:     5412     156
@@ -492,11 +320,43 @@ Loading snapshot worklib.reg_arstn:v .................... Done
 ncsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
 ncsim> source /esat/micas-data/software/Cadence/incisiv_15.20.058/tools/inca/files/ncsimrc
 ncsim> run
-[1;34m
-Mult2 Working Correctly
+[1;31m
+Error in Mult2 function
 [0m
+Debug info, reg_array[          0]: 0000000000000000
+Debug info, reg_array[          1]: 0000000000000000
+Debug info, reg_array[          2]: 0000000000000000
+Debug info, reg_array[          3]: 0000000000000000
+Debug info, reg_array[          4]: 0000000000000000
+Debug info, reg_array[          5]: 0000000000000000
+Debug info, reg_array[          6]: 0000000000000000
+Debug info, reg_array[          7]: 0000000000000000
+Debug info, reg_array[          8]: 0000000000000001
+Debug info, reg_array[          9]: 0000000000000001
+Debug info, reg_array[         10]: 0000000000000003
+Debug info, reg_array[         11]: 0000000000000004
+Debug info, reg_array[         12]: 0000000000000005
+Debug info, reg_array[         13]: 0000000000000006
+Debug info, reg_array[         14]: 0000000000000007
+Debug info, reg_array[         15]: 0000000000000008
+Debug info, reg_array[         16]: 0000000000000009
+Debug info, reg_array[         17]: 000000000000000a
+Debug info, reg_array[         18]: 0000000000000001
+Debug info, reg_array[         19]: 000000000000000c
+Debug info, reg_array[         20]: 000000000000001e
+Debug info, reg_array[         21]: 0000000000000038
+Debug info, reg_array[         22]: 000000000000005a
+Debug info, reg_array[         23]: 00000000000000bd
+Debug info, reg_array[         24]: 0000000000000000
+Debug info, reg_array[         25]: 0000000000000000
+Debug info, reg_array[         26]: 0000000000000000
+Debug info, reg_array[         27]: 0000000000000000
+Debug info, reg_array[         28]: 0000000000000000
+Debug info, reg_array[         29]: 0000000000000000
+Debug info, reg_array[         30]: 0000000000000000
+Debug info, reg_array[         31]: 0000000000000000
          40 cycles
 Simulation complete via $finish(1) at time 160450 NS + 7
 ../RTL/cpu_tb.v:319    $finish;
 ncsim> exit
-TOOL:	ncverilog	15.20-s058: Exiting on Mar 28, 2022 at 17:05:43 CEST  (total: 00:00:02)
+TOOL:	ncverilog	15.20-s058: Exiting on Mar 28, 2022 at 18:06:03 CEST  (total: 00:00:02)
