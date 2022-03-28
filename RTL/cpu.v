@@ -216,7 +216,7 @@ reg_arstn_en#(
 )signal_pipe_ID_EXE_control(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      ({alu_op, reg_dst, branch, mem_read, mem_2_reg, mem_write, alu_src, reg_write, jump}),
+   .din      ({jump, reg_write, alu_src, mem_write, mem_2_reg, mem_read, branch, reg_dst, alu_op}),
    .en       (enable        ),
    .dout    (control_ID_EXE  )
 );
