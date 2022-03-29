@@ -38,7 +38,10 @@ module cpu(
 
    );
 
-wire              zero_flag;
+
+// Defining all wires
+wire              zero_flag,zero_flag_MEM;
+
 wire [       1:0] alu_op;
 wire [       3:0] alu_control;
 wire              reg_dst,branch,mem_read,mem_2_reg,
@@ -46,27 +49,45 @@ wire              reg_dst,branch,mem_read,mem_2_reg,
 wire [       4:0] regfile_waddr;
 wire [      63:0] mem_data,alu_out,
                   alu_operand_2;
-wire [63:0] branch_pc,jump_pc;
+// Program Counters
+wire [63:0] updated_pc,current_pc,updated_pc_ID,updated_pc_EXE;
+wire [63:0] branch_pc,branch_pc_MEM;
+wire [63:0] jump_pc,jump_pc_MEM;
+
+// Control signals
+wire [9:0]  control_signals_MEM,control_signals_WB,control_signals_EXE;
+
+// Instructions
+wire [31:0] instruction,instruction_ID,instruction_WB,instruction_EXE,instruction_MEM;
+
+// Immediate
+wire signed [63:0] immediate_extended,immediate_extended_EXE;
+
+// Data Wires
+wire signed [63:0] regfile_rdata_1,regfile_rdata_1_EXE;
+wire signed [63:0] regfile_rdata_2,regfile_rdata_2_EXE,regfile_rdata_2_MEM;
+wire [63:0] regfile_wdata;
+
+wire [63:0] alu_out_MEM,alu_out_WB;
+
+wire [63:0] mem_data_WB;
 
 
 
 // IF STAGE
 // -----------------------------------------------------------
-wire [31:0] instruction;
-wire [63:0] updated_pc,current_pc,branch_pc_EXE_IF,jump_pc_EXE_IF;
-wire [9:0]  control_EXE_MEM;
-wire        zero_flag_EXE_IF;
 
+// Program counter
 pc #(
    .DATA_W(64)
 ) program_counter (
    .clk       (clk       ),
    .arst_n    (arst_n    ),
-   .branch_pc (branch_pc_EXE_IF),
-   .jump_pc   (jump_pc_EXE_IF),
-   .zero_flag (zero_flag_EXE_IF),
-   .branch    (control_EXE_MEM[3]),
-   .jump      (control_EXE_MEM[9]),
+   .branch_pc (branch_pc_MEM),
+   .jump_pc   (jump_pc_MEM),
+   .zero_flag (zero_flag_MEM),
+   .branch    (control_signals_MEM[3]),
+   .jump      (control_signals_MEM[9]),
    .current_pc(current_pc), // output
    .enable    (enable    ),
    .updated_pc(updated_pc)
@@ -90,8 +111,8 @@ sram_BW32 #(
    .rdata_ext(rdata_ext     ) // output
 );
 
-// IF_ID Pipeline register instruction signaluction_IF_ID
-wire [31:0] instruction_IF_ID;
+// IF_ID Pipeline registers
+
 reg_arstn_en#(
    .DATA_W(32) // width of the forwarded signal
 )signal_pipe_IF_ID_instruction(
@@ -99,10 +120,9 @@ reg_arstn_en#(
    .arst_n   (arst_n        ),
    .din      (instruction   ),
    .en       (enable        ),
-   .dout    (instruction_IF_ID)
+   .dout	 (instruction_ID)
 );
 
-wire [63:0] updated_pc_IF_ID;
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
 )signal_pipe_IF_ID_updated_pc(
@@ -110,19 +130,14 @@ reg_arstn_en#(
    .arst_n   (arst_n        ),
    .din      (updated_pc    ),
    .en       (enable        ),
-   .dout    (updated_pc_IF_ID)
+   .dout     (updated_pc_ID)
 );
 
 // ID STAGE
 // -----------------------------------------------------------
-wire signed [63:0] immediate_extended;
-wire signed [63:0] regfile_rdata_1,regfile_rdata_2;
-wire [63:0] regfile_wdata;
-wire [31:0] instruction_MEM_WB;
-wire [9:0]  control_MEM_WB;
 
 control_unit control_unit(
-   .opcode   (instruction_IF_ID[6:0]),
+   .opcode   (instruction_ID[6:0]),
    .alu_op   (alu_op          ), // output
    .reg_dst  (reg_dst         ),
    .branch   (branch          ),
@@ -139,23 +154,23 @@ register_file #(
 ) register_file(
    .clk      (clk               ),
    .arst_n   (arst_n            ),
-   .reg_write(control_MEM_WB[8] ),
-   .raddr_1  (instruction_IF_ID[19:15]),
-   .raddr_2  (instruction_IF_ID[24:20]),
-   .waddr    (instruction_MEM_WB[11:7]),
+   .reg_write(control_signals_WB[8] ),
+   .raddr_1  (instruction_ID[19:15]),
+   .raddr_2  (instruction_ID[24:20]),
+   .waddr    (instruction_WB[11:7]),
    .wdata    (regfile_wdata),
    .rdata_1  (regfile_rdata_1   ), // output
    .rdata_2  (regfile_rdata_2   )
 );
 
 immediate_extend_unit immediate_extend_u(
-    .instruction         (instruction_IF_ID),
+    .instruction         (instruction_ID),
     .immediate_extended  (immediate_extended) // output
 );
 
 
 // ID_EXE Pipeline signals
-wire signed [63:0] immediate_extended_ID_EXE;
+
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
 )signal_pipe_ID_EXE_immediate(
@@ -163,10 +178,9 @@ reg_arstn_en#(
    .arst_n   (arst_n        ),
    .din      (immediate_extended),
    .en       (enable        ),
-   .dout    (immediate_extended_ID_EXE)
+   .dout     (immediate_extended_EXE)
 );
 
-wire signed [63:0] regfile_rdata_1_ID_EXE;
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
 )signal_pipe_ID_EXE_rdata1(
@@ -174,10 +188,9 @@ reg_arstn_en#(
    .arst_n   (arst_n        ),
    .din      (regfile_rdata_1),
    .en       (enable        ),
-   .dout    (regfile_rdata_1_ID_EXE)
+   .dout     (regfile_rdata_1_EXE)
 );
 
-wire signed [63:0] regfile_rdata_2_ID_EXE;
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
 )signal_pipe_ID_EXE_rdata2(
@@ -185,32 +198,29 @@ reg_arstn_en#(
    .arst_n   (arst_n        ),
    .din      (regfile_rdata_2),
    .en       (enable        ),
-   .dout    (regfile_rdata_2_ID_EXE)
+   .dout     (regfile_rdata_2_EXE)
 );
 
-wire [31:0] instruction_ID_EXE;
 reg_arstn_en#(
    .DATA_W(32) // width of the forwarded signal
 )signal_pipe_ID_EXE_instruction(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      (instruction_IF_ID),
+   .din      (instruction_ID),
    .en       (enable        ),
-   .dout    (instruction_ID_EXE)
+   .dout     (instruction_EXE)
 );
 
-wire [63:0] updated_pc_ID_EXE;
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
 )signal_pipe_ID_EXE_updated_pc(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      (updated_pc_IF_ID),
+   .din      (updated_pc_ID),
    .en       (enable        ),
-   .dout    (updated_pc_ID_EXE)
+   .dout     (updated_pc_EXE)
 );
 
-wire [9:0] control_ID_EXE;
 reg_arstn_en#(
    .DATA_W(10) // width of the forwarded signal
 )signal_pipe_ID_EXE_control(
@@ -218,31 +228,31 @@ reg_arstn_en#(
    .arst_n   (arst_n        ),
    .din      ({jump, reg_write, alu_src, mem_write, mem_2_reg, mem_read, branch, reg_dst, alu_op}),
    .en       (enable        ),
-   .dout    (control_ID_EXE  )
+   .dout     (control_signals_EXE)
 );
 
 // EXE STAGE
 // -----------------------------------------------------------
-wire [1:0] sel_reg1;
-wire [1:0] sel_reg2;
 
+// Wires for forwarding
+wire [1:0] sel_reg1,sel_reg2;
 wire [63:0] alu_mux_out;
+wire [63:0] alu_operand_1;
+
 mux_2 #(
    .DATA_W(64)
 ) alu_operand_mux (
-   .input_a (immediate_extended_ID_EXE),
-   .input_b (regfile_rdata_2_ID_EXE),
-   .select_a(control_ID_EXE[7] ),
+   .input_a (immediate_extended_EXE),
+   .input_b (regfile_rdata_2_EXE),
+   .select_a(control_signals_EXE[7] ),
    .mux_out (alu_mux_out     ) // output
 );
 
-wire [63:0] alu_out_EXE_MEM;
-wire [63:0] alu_operand_1;
 mux_3 #(
    .DATA_W(64)
 ) alu_forw_mux1 (
-   .input_a (regfile_rdata_1_ID_EXE),
-   .input_b (alu_out_EXE_MEM),
+   .input_a (regfile_rdata_1_EXE),
+   .input_b (alu_out_MEM),
    .input_c (regfile_wdata),
    .select  (sel_reg1 ),
    .mux_out (alu_operand_1     ) // output
@@ -252,23 +262,23 @@ mux_3 #(
    .DATA_W(64)
 ) alu_forw_mux2 (
    .input_a (alu_mux_out),
-   .input_b (alu_out_EXE_MEM),
+   .input_b (alu_out_MEM),
    .input_c (regfile_wdata),
    .select  (sel_reg2 ),
    .mux_out (alu_operand_2     ) // output
 );
 
 alu_control alu_ctrl(
-   .func7_5       ({instruction_ID_EXE[30],instruction_ID_EXE[25]}   ),
-   .func3          (instruction_ID_EXE[14:12]),
-   .alu_op         (control_ID_EXE[1:0] ),
+   .func7_5        ({instruction_EXE[30],instruction_EXE[25]}),
+   .func3          (instruction_EXE[14:12]),
+   .alu_op         (control_signals_EXE[1:0] ),
    .alu_control    (alu_control       ) // output
 );
 
 alu#(
    .DATA_W(64)
 ) alu(
-   .alu_in_0 (alu_operand_1),
+   .alu_in_0 (alu_operand_1   ),
    .alu_in_1 (alu_operand_2   ),
    .alu_ctrl (alu_control     ),
    .alu_out  (alu_out         ), // output
@@ -279,56 +289,54 @@ alu#(
 branch_unit#(
    .DATA_W(64)
 )branch_unit(
-   .updated_pc         (updated_pc_ID_EXE ),
-   .immediate_extended (immediate_extended_ID_EXE),
+   .updated_pc         (updated_pc_EXE ),
+   .immediate_extended (immediate_extended_EXE),
    .branch_pc          (branch_pc         ), // output
    .jump_pc            (jump_pc           )
 );
 
-wire [31:0] instruction_EXE_MEM;
 forwarding_unit forw_u(
-	.instruction_EX(instruction_ID_EXE),
-    .instruction_MEM(instruction_EXE_MEM),
-    .instruction_WB(instruction_MEM_WB),
-	.RegWrite_MEM(control_EXE_MEM[8]),
-	.RegWrite_WB(control_MEM_WB[8]),
+	.instruction_EX(instruction_EXE),
+    .instruction_MEM(instruction_MEM),
+    .instruction_WB(instruction_WB),
+	.RegWrite_MEM(control_signals_MEM[8]),
+	.RegWrite_WB(control_signals_WB[8]),
     .sel_reg1(sel_reg1),
     .sel_reg2(sel_reg2)
 );
 
-// EXE_IF Pipeline signals
+// EXE_MEM Pipeline signals
+
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
-)signal_pipe_EXE_IF_branch_pc(
+)signal_pipe_EXE_MEM_branch_pc(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
    .din      (branch_pc     ),
    .en       (enable        ),
-   .dout    (branch_pc_EXE_IF)
+   .dout     (branch_pc_MEM )
 );
 
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
-)signal_pipe_EXE_IF_jump_pc(
+)signal_pipe_EXE_MEM_jump_pc(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
    .din      (jump_pc       ),
    .en       (enable        ),
-   .dout    (jump_pc_EXE_IF)
+   .dout     (jump_pc_MEM   )
 );
 
 reg_arstn_en#(
    .DATA_W(1) // width of the forwarded signal
-)signal_pipe_EXE_IF_zero_pc(
+)signal_pipe_EXE_MEM_zero_pc(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
    .din      (zero_flag     ),
    .en       (enable        ),
-   .dout    (zero_flag_EXE_IF)
+   .dout     (zero_flag_MEM )
 );
 
-
-// EXE_MEM Pipeline signals
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
 )signal_pipe_EXE_MEM_alu_out(
@@ -336,29 +344,27 @@ reg_arstn_en#(
    .arst_n   (arst_n        ),
    .din      (alu_out       ),
    .en       (enable        ),
-   .dout    (alu_out_EXE_MEM)
+   .dout     (alu_out_MEM)
 );
 
-wire signed [63:0] regfile_rdata_2_EXE_MEM;
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
 )signal_pipe_EXE_MEM_rdata2(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      (regfile_rdata_2_ID_EXE),
+   .din      (regfile_rdata_2_EXE),
    .en       (enable        ),
-   .dout    (regfile_rdata_2_EXE_MEM)
+   .dout     (regfile_rdata_2_MEM)
 );
-
 
 reg_arstn_en#(
    .DATA_W(32) // width of the forwarded signal
 )signal_pipe_EXE_MEM_instruction(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      (instruction_ID_EXE),
+   .din      (instruction_EXE),
    .en       (enable        ),
-   .dout    (instruction_EXE_MEM)
+   .dout     (instruction_MEM)
 );
 
 reg_arstn_en#(
@@ -366,23 +372,24 @@ reg_arstn_en#(
 )signal_pipe_EXE_MEM_control(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      (control_ID_EXE),
+   .din      (control_signals_EXE),
    .en       (enable        ),
-   .dout    (control_EXE_MEM)
+   .dout     (control_signals_MEM)
 );
 
 // MEM STAGE
 // -----------------------------------------------------------
+
 // The data memory.
 sram_BW64 #(
    .ADDR_W(10),
    .DATA_W(64)
 ) data_memory(
    .clk      (clk            ),
-   .addr     (alu_out_EXE_MEM),
-   .wen      (control_EXE_MEM[6]),
-   .ren      (control_EXE_MEM[4]),
-   .wdata    (regfile_rdata_2_EXE_MEM),
+   .addr     (alu_out_MEM),
+   .wen      (control_signals_MEM[6]),
+   .ren      (control_signals_MEM[4]),
+   .wdata    (regfile_rdata_2_MEM),
    .rdata    (mem_data       ), // output
    .addr_ext (addr_ext_2     ), // input
    .wen_ext  (wen_ext_2      ),
@@ -392,18 +399,17 @@ sram_BW64 #(
 );
 
 // MEM_WB Pipeline signals
-wire [63:0] alu_out_MEM_WB;
+
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
 )signal_pipe_MEM_WB_alu_out(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      (alu_out_EXE_MEM),
+   .din      (alu_out_MEM   ),
    .en       (enable        ),
-   .dout    (alu_out_MEM_WB)
+   .dout     (alu_out_WB    )
 );
 
-wire [63:0] mem_data_MEM_WB;
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
 )signal_pipe_MEM_WB_mem_data(
@@ -411,7 +417,7 @@ reg_arstn_en#(
    .arst_n   (arst_n        ),
    .din      (mem_data      ),
    .en       (enable        ),
-   .dout    (mem_data_MEM_WB)
+   .dout     (mem_data_WB   )
 );
 
 reg_arstn_en#(
@@ -419,9 +425,9 @@ reg_arstn_en#(
 )signal_pipe_MEM_WB_instruction(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      (instruction_EXE_MEM),
+   .din      (instruction_MEM),
    .en       (enable        ),
-   .dout    (instruction_MEM_WB)
+   .dout     (instruction_WB)
 );
 
 reg_arstn_en#(
@@ -429,9 +435,9 @@ reg_arstn_en#(
 )signal_pipe_MEM_WB_control(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      (control_EXE_MEM),
+   .din      (control_signals_MEM),
    .en       (enable        ),
-   .dout    (control_MEM_WB)
+   .dout     (control_signals_WB)
 );
 
 // WB STAGE
@@ -440,12 +446,10 @@ reg_arstn_en#(
 mux_2 #(
    .DATA_W(64)
 ) regfile_data_mux (
-   .input_a  (mem_data_MEM_WB),
-   .input_b  (alu_out_MEM_WB),
-   .select_a (control_MEM_WB[5]),
+   .input_a  (mem_data_WB),
+   .input_b  (alu_out_WB),
+   .select_a (control_signals_WB[5]),
    .mux_out  (regfile_wdata) // output
 );
 
 endmodule
-
-
