@@ -55,7 +55,7 @@ wire [63:0] branch_pc,branch_pc_MEM;
 wire [63:0] jump_pc,jump_pc_MEM;
 
 // Control signals
-wire [9:0]  control_signals_MEM,control_signals_WB,control_signals_EXE;
+wire [9:0]  control_signals_MEM,control_signals_WB,control_signals_EXE, control_signals_ID;
 
 // Instructions
 wire [31:0] instruction,instruction_ID,instruction_WB,instruction_EXE,instruction_MEM;
@@ -71,6 +71,9 @@ wire [63:0] regfile_wdata;
 wire [63:0] alu_out_MEM,alu_out_WB;
 
 wire [63:0] mem_data_WB;
+
+// Hazard unit wires
+wire       PCWrite, IF_ID_Write, stall_sel;
 
 
 
@@ -89,7 +92,8 @@ pc #(
    .branch    (control_signals_MEM[3]),
    .jump      (control_signals_MEM[9]),
    .current_pc(current_pc), // output
-   .enable    (enable    ),
+   .enable    (enable   ),
+   .PCWrite   (PCWrite  ),
    .updated_pc(updated_pc)
 );
 
@@ -119,8 +123,8 @@ reg_arstn_en#(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
    .din      (instruction   ),
-   .en       (enable        ),
-   .dout	 (instruction_ID)
+   .en       (IF_ID_Write   ),
+   .dout     (instruction_ID)
 );
 
 reg_arstn_en#(
@@ -129,12 +133,22 @@ reg_arstn_en#(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
    .din      (updated_pc    ),
-   .en       (enable        ),
+   .en       (IF_ID_Write   ),
    .dout     (updated_pc_ID)
 );
 
 // ID STAGE
 // -----------------------------------------------------------
+
+hazard_unit hazard_unit(
+   .instruction_ID  (instruction_ID),
+   .instruction_EXE (instruction_EXE),
+   .MemRead_EXE     (control_signals_EXE[4]),
+   .MemRead_ID      (control_signals_ID[4]),
+   .PCWrite         (PCWrite),
+   .IF_ID_Write     (IF_ID_Write),
+   .stall_sel       (stall_sel)
+);
 
 control_unit control_unit(
    .opcode   (instruction_ID[6:0]),
@@ -147,6 +161,15 @@ control_unit control_unit(
    .alu_src  (alu_src         ),
    .reg_write(reg_write       ),
    .jump     (jump            )
+);
+
+mux_2 #(
+   .DATA_W(10)
+) control_mux (
+   .input_a ({jump, reg_write, alu_src, mem_write, mem_2_reg, mem_read, branch, reg_dst, alu_op}),
+   .input_b (10'b0),
+   .select_a(stall_sel ),
+   .mux_out (control_signals_ID) // output
 );
 
 register_file #(
@@ -226,7 +249,7 @@ reg_arstn_en#(
 )signal_pipe_ID_EXE_control(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      ({jump, reg_write, alu_src, mem_write, mem_2_reg, mem_read, branch, reg_dst, alu_op}),
+   .din      (control_signals_ID),
    .en       (enable        ),
    .dout     (control_signals_EXE)
 );

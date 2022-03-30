@@ -20,6 +20,7 @@ module pc#(
       input  wire              clk,
       input  wire              arst_n,
       input  wire              enable,
+      input  wire              PCWrite,
       input  wire [DATA_W-1:0] branch_pc,
       input  wire [DATA_W-1:0] jump_pc,  
       input  wire              zero_flag,
@@ -32,12 +33,12 @@ module pc#(
    localparam  [DATA_W-1:0] PC_INCREASE= {{(DATA_W-3){1'b0}},3'd4};
   
 
-   wire [DATA_W-1:0] pc_r, next_pc, next_pc_i;
+   wire [DATA_W-1:0] pc_r, next_pc, next_pc_i, next_pc_j;
    reg               pc_src;
       
 
    always@(*) pc_src = zero_flag & branch; 
-      
+   
    mux_2#(
       .DATA_W(DATA_W)
    ) mux_branch( 
@@ -53,6 +54,15 @@ module pc#(
       .input_a (jump_pc   ),
       .input_b (next_pc_i ),
       .select_a(jump      ),
+      .mux_out (next_pc_j   )
+   );
+
+   mux_2#(
+      .DATA_W(DATA_W)
+   ) mux_stall( 
+      .input_a (next_pc_j ),
+      .input_b (current_pc),
+      .select_a(PCWrite   ),
       .mux_out (next_pc   )
    );
    

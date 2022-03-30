@@ -11,6 +11,7 @@ set verilog_files { \
     mux_2
     mux_3
     forwarding_unit
+    hazard_unit
    pc
    reg_arstn
    reg_arstn_en

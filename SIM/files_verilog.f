@@ -15,3 +15,4 @@
 
 ../RTL/mux_3.v
 ../RTL/forwarding_unit.v
+../RTL/hazard_unit.v
