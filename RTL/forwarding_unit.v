@@ -14,20 +14,19 @@ always @(*) begin
 	assign sel_reg1 = 2'd0;
 	assign sel_reg2 = 2'd0;
 
+	if (RegWrite_WB == 1'b1 && instruction_WB[11:7] == instruction_EX[19:15]) begin
+		assign sel_reg1 = 2'd2;
+	end
 	if (RegWrite_MEM == 1'b1 && instruction_MEM[11:7] == instruction_EX[19:15]) begin
 		assign sel_reg1 = 2'd1;
+	end
+
+	if (RegWrite_WB == 1'b1 && instruction_WB[11:7] == instruction_EX[24:20] ) begin
+		assign sel_reg2 = 2'd2;
 	end
 	if (RegWrite_MEM == 1'b1 && instruction_MEM[11:7] == instruction_EX[24:20] ) begin
 		assign sel_reg2 = 2'd1;
 	end
-
-	if (RegWrite_WB == 1'b1 && instruction_WB[11:7] == instruction_EX[19:15]) begin
-		assign sel_reg1 = 2'd2;
-	end
-	if (RegWrite_WB == 1'b1 && instruction_WB[11:7] == instruction_EX[24:20] ) begin
-		assign sel_reg2 = 2'd2;
-	end
-
 end
 
 endmodule

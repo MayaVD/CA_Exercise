@@ -243,9 +243,9 @@ mux_2 #(
    .DATA_W(64)
 ) alu_operand_mux (
    .input_a (immediate_extended_EXE),
-   .input_b (regfile_rdata_2_EXE),
+   .input_b (alu_mux_out),
    .select_a(control_signals_EXE[7] ),
-   .mux_out (alu_mux_out     ) // output
+   .mux_out (alu_operand_2     ) // output
 );
 
 mux_3 #(
@@ -261,11 +261,11 @@ mux_3 #(
 mux_3 #(
    .DATA_W(64)
 ) alu_forw_mux2 (
-   .input_a (alu_mux_out),
+   .input_a (regfile_rdata_2_EXE),
    .input_b (alu_out_MEM),
    .input_c (regfile_wdata),
    .select  (sel_reg2 ),
-   .mux_out (alu_operand_2     ) // output
+   .mux_out (alu_mux_out     ) // output
 );
 
 alu_control alu_ctrl(

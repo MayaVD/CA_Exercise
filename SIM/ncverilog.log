@@ -1,5 +1,5 @@
 ncverilog(64): 15.20-s058: (c) Copyright 1995-2018 Cadence Design Systems, Inc.
-TOOL:	ncverilog	15.20-s058: Started on Mar 28, 2022 at 18:06:01 CEST
+TOOL:	ncverilog	15.20-s058: Started on Mar 30, 2022 at 15:08:40 CEST
 ncverilog
 	+sv
 	-f files_verilog.f
@@ -23,6 +23,9 @@ ncverilog
 	+nctimescale+1ns/10ps
 	+access+rwc
 	-ALLOWREDEFINITION
+Recompiling... reason: file '../RTL/forwarding_unit.v' is newer than expected.
+	expected: Wed Mar 30 15:04:32 2022
+	actual:   Wed Mar 30 15:08:37 2022
 file: ../RTL/saed32sram_mod.v
 `define numAddr 7
                  |
@@ -190,116 +193,8 @@ file: ../RTL/forwarding_unit.v
 ncelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
 	Building instance overlay tables: .................... Done
 	Generating native compiled code:
-		worklib.SRAM1RW1024x8_1bit:v <0x3b3e5c15>
-			streams:   5, words:  1366
-		worklib.SRAM1RW128x46_1bit:v <0x4daa49c2>
-			streams:   5, words:  1354
-		worklib.SRAM1RW128x48_1bit:v <0x6a7abfa4>
-			streams:   5, words:  1354
-		worklib.SRAM1RW128x8_1bit:v <0x2570975a>
-			streams:   5, words:  1354
-		worklib.SRAM1RW256x128_1bit:v <0x03ec86a9>
-			streams:   5, words:  1366
-		worklib.SRAM1RW256x32_1bit:v <0x021ccc77>
-			streams:   5, words:  1366
-		worklib.SRAM1RW256x46_1bit:v <0x24e467ee>
-			streams:   5, words:  1366
-		worklib.SRAM1RW256x48_1bit:v <0x03349188>
-			streams:   5, words:  1366
-		worklib.SRAM1RW256x8_1bit:v <0x24fd444d>
-			streams:   5, words:  1366
-		worklib.SRAM1RW32x50_1bit:v <0x5ffeaf71>
-			streams:   5, words:  1354
-		worklib.SRAM1RW512x128_1bit:v <0x464c51a8>
-			streams:   5, words:  1366
-		worklib.SRAM1RW512x32_1bit:v <0x7a9fa844>
-			streams:   5, words:  1366
-		worklib.SRAM1RW512x8_1bit:v <0x16be7589>
-			streams:   5, words:  1366
-		worklib.SRAM1RW64x128_1bit:v <0x1e920055>
-			streams:   5, words:  1354
-		worklib.SRAM1RW64x32_1bit:v <0x6b605596>
-			streams:   5, words:  1354
-		worklib.SRAM1RW64x34_1bit:v <0x4f20568a>
-			streams:   5, words:  1354
-		worklib.SRAM1RW64x8_1bit:v <0x7e4c5a2f>
-			streams:   5, words:  1354
-		worklib.SRAM2RW128x16_1bit:v <0x400a4078>
-			streams:  10, words:  2552
-		worklib.SRAM2RW128x32_1bit:v <0x33bd04c9>
-			streams:   8, words:  2700
-		worklib.SRAM2RW128x4_1bit:v <0x480176b7>
-			streams:  10, words:  2552
-		worklib.SRAM2RW128x8_1bit:v <0x0e7d20c0>
-			streams:  10, words:  2552
-		worklib.SRAM2RW16x16_1bit:v <0x624ee32e>
-			streams:  10, words:  2552
-		worklib.SRAM2RW16x32_1bit:v <0x349fcf38>
-			streams:  10, words:  2552
-		worklib.SRAM2RW16x4_1bit:v <0x6e6187d5>
-			streams:  10, words:  2552
-		worklib.SRAM2RW16x8_1bit:v <0x281dd1a2>
-			streams:  10, words:  2552
-		worklib.SRAM2RW32x16_1bit:v <0x686e6f91>
-			streams:  10, words:  2552
-		worklib.SRAM2RW32x22_1bit:v <0x36272034>
-			streams:  10, words:  2552
-		worklib.SRAM2RW32x32_1bit:v <0x3ebf4387>
-			streams:  10, words:  2552
-		worklib.SRAM2RW32x39_1bit:v <0x3e8fb07a>
-			streams:  10, words:  2552
-		worklib.SRAM2RW32x4_1bit:v <0x70840d4d>
-			streams:  10, words:  2552
-		worklib.SRAM2RW32x8_1bit:v <0x36f85b3a>
-			streams:  10, words:  2552
-		worklib.SRAM2RW64x16_1bit:v <0x089fc48c>
-			streams:  10, words:  2552
-		worklib.SRAM2RW64x32_1bit:v <0x5e4ee89a>
-			streams:  10, words:  2552
-		worklib.SRAM2RW64x4_1bit:v <0x78ac9832>
-			streams:  10, words:  2552
-		worklib.SRAM2RW64x8_1bit:v <0x3ed0ce45>
-			streams:  10, words:  2552
-		worklib.alu:v <0x73904250>
-			streams:   6, words:  5204
-		worklib.alu_control:v <0x4c9a9a02>
-			streams:   3, words:  1003
-		worklib.branch_unit:v <0x7b2dad56>
-			streams:   1, words:   490
-		worklib.control_unit:v <0x5182b77c>
-			streams:   1, words:  6521
-		worklib.cpu:v <0x38b35d97>
-			streams:  10, words:  1644
-		worklib.cpu_tb:v <0x7e2babb3>
-			streams:  27, words: 53186
-		worklib.forwarding_unit:v <0x38356a34>
+		worklib.forwarding_unit:v <0x71e3198e>
 			streams:   7, words:  8756
-		worklib.immediate_extend_unit:v <0x013d814d>
-			streams:   2, words:  3075
-		worklib.mux_2:v <0x69a21794>
-			streams:   1, words:   432
-		worklib.mux_3:v <0x7533a334>
-			streams:   1, words:   652
-		worklib.pc:v <0x64f655be>
-			streams:   5, words:  1517
-		worklib.reg_arstn:v <0x3ac60968>
-			streams:   3, words:   647
-		worklib.reg_arstn_en:v <0x0fea182b>
-			streams:   3, words:   802
-		worklib.reg_arstn_en:v <0x1a7eb253>
-			streams:   3, words:  1033
-		worklib.reg_arstn_en:v <0x43919145>
-			streams:   3, words:   998
-		worklib.reg_arstn_en:v <0x5591731b>
-			streams:   3, words:   937
-		worklib.reg_arstn_en:v <0x697a0079>
-			streams:   3, words:   774
-		worklib.register_file:v <0x7a425b1b>
-			streams:   5, words: 28015
-		worklib.sram_BW32:v <0x248c010f>
-			streams:  14, words:  5257
-		worklib.sram_BW64:v <0x01709e6d>
-			streams:  20, words:  7417
 	Building instance specific data structures.
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
@@ -320,43 +215,11 @@ Loading snapshot worklib.reg_arstn:v .................... Done
 ncsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
 ncsim> source /esat/micas-data/software/Cadence/incisiv_15.20.058/tools/inca/files/ncsimrc
 ncsim> run
-[1;31m
-Error in Mult2 function
+[1;34m
+Mult3 Working Correctly
 [0m
-Debug info, reg_array[          0]: 0000000000000000
-Debug info, reg_array[          1]: 0000000000000000
-Debug info, reg_array[          2]: 0000000000000000
-Debug info, reg_array[          3]: 0000000000000000
-Debug info, reg_array[          4]: 0000000000000000
-Debug info, reg_array[          5]: 0000000000000000
-Debug info, reg_array[          6]: 0000000000000000
-Debug info, reg_array[          7]: 0000000000000000
-Debug info, reg_array[          8]: 0000000000000001
-Debug info, reg_array[          9]: 0000000000000001
-Debug info, reg_array[         10]: 0000000000000003
-Debug info, reg_array[         11]: 0000000000000004
-Debug info, reg_array[         12]: 0000000000000005
-Debug info, reg_array[         13]: 0000000000000006
-Debug info, reg_array[         14]: 0000000000000007
-Debug info, reg_array[         15]: 0000000000000008
-Debug info, reg_array[         16]: 0000000000000009
-Debug info, reg_array[         17]: 000000000000000a
-Debug info, reg_array[         18]: 0000000000000001
-Debug info, reg_array[         19]: 000000000000000c
-Debug info, reg_array[         20]: 000000000000001e
-Debug info, reg_array[         21]: 0000000000000038
-Debug info, reg_array[         22]: 000000000000005a
-Debug info, reg_array[         23]: 00000000000000bd
-Debug info, reg_array[         24]: 0000000000000000
-Debug info, reg_array[         25]: 0000000000000000
-Debug info, reg_array[         26]: 0000000000000000
-Debug info, reg_array[         27]: 0000000000000000
-Debug info, reg_array[         28]: 0000000000000000
-Debug info, reg_array[         29]: 0000000000000000
-Debug info, reg_array[         30]: 0000000000000000
-Debug info, reg_array[         31]: 0000000000000000
-         40 cycles
-Simulation complete via $finish(1) at time 160450 NS + 7
+         25 cycles
+Simulation complete via $finish(1) at time 158950 NS + 7
 ../RTL/cpu_tb.v:319    $finish;
 ncsim> exit
-TOOL:	ncverilog	15.20-s058: Exiting on Mar 28, 2022 at 18:06:03 CEST  (total: 00:00:02)
+TOOL:	ncverilog	15.20-s058: Exiting on Mar 30, 2022 at 15:08:41 CEST  (total: 00:00:01)
