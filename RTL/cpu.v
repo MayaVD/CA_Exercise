@@ -40,7 +40,7 @@ module cpu(
 
 
 // Defining all wires
-wire              zero_flag,zero_flag_MEM;
+reg              zero_flag;
 
 wire [       1:0] alu_op;
 wire [       3:0] alu_control;
@@ -50,9 +50,9 @@ wire [       4:0] regfile_waddr;
 wire [      63:0] mem_data,alu_out,
                   alu_operand_2;
 // Program Counters
-wire [63:0] updated_pc,current_pc,updated_pc_ID,updated_pc_EXE;
-wire [63:0] branch_pc,branch_pc_MEM;
-wire [63:0] jump_pc,jump_pc_MEM;
+wire [63:0] updated_pc,current_pc,updated_pc_ID;
+wire [63:0] branch_pc;
+wire [63:0] jump_pc;
 
 // Control signals
 wire [9:0]  control_signals_MEM,control_signals_WB,control_signals_EXE, control_signals_ID;
@@ -80,15 +80,21 @@ wire       PCWrite, IF_ID_Write, stall_sel;
 // IF STAGE
 // -----------------------------------------------------------
 
+reg IF_ID_enable;
+
+always@(*) begin
+	assign IF_ID_enable = (IF_ID_Write & ~(zero_flag & (control_signals_ID[3] | control_signals_ID[9])));
+end
+
 // Program counter
 pc #(
    .DATA_W(64)
 ) program_counter (
    .clk       (clk       ),
    .arst_n    (arst_n    ),
-   .branch_pc (branch_pc_MEM),
-   .jump_pc   (jump_pc_MEM),
-   .zero_flag (zero_flag_MEM),
+   .branch_pc (branch_pc),
+   .jump_pc   (jump_pc),
+   .zero_flag (zero_flag),
    .branch    (control_signals_MEM[3]),
    .jump      (control_signals_MEM[9]),
    .current_pc(current_pc), // output
@@ -123,7 +129,7 @@ reg_arstn_en#(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
    .din      (instruction   ),
-   .en       (IF_ID_Write   ),
+   .en       (IF_ID_enable  ),
    .dout     (instruction_ID)
 );
 
@@ -133,12 +139,25 @@ reg_arstn_en#(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
    .din      (updated_pc    ),
-   .en       (IF_ID_Write   ),
-   .dout     (updated_pc_ID)
+   .en       (IF_ID_enable  ),
+   .dout     (updated_pc_ID )
 );
 
 // ID STAGE
 // -----------------------------------------------------------
+
+branch_unit#(
+   .DATA_W(64)
+)branch_unit(
+   .updated_pc         (updated_pc_ID ),
+   .immediate_extended (immediate_extended),
+   .branch_pc          (branch_pc         ), // output
+   .jump_pc            (jump_pc           )
+);
+
+always@(*) begin
+	zero_flag = (regfile_rdata_1 == regfile_rdata_2) ? 1'b1 : 1'b0;
+end
 
 hazard_unit hazard_unit(
    .instruction_ID  (instruction_ID),
@@ -235,16 +254,6 @@ reg_arstn_en#(
 );
 
 reg_arstn_en#(
-   .DATA_W(64) // width of the forwarded signal
-)signal_pipe_ID_EXE_updated_pc(
-   .clk      (clk           ),
-   .arst_n   (arst_n        ),
-   .din      (updated_pc_ID),
-   .en       (enable        ),
-   .dout     (updated_pc_EXE)
-);
-
-reg_arstn_en#(
    .DATA_W(10) // width of the forwarded signal
 )signal_pipe_ID_EXE_control(
    .clk      (clk           ),
@@ -305,17 +314,8 @@ alu#(
    .alu_in_1 (alu_operand_2   ),
    .alu_ctrl (alu_control     ),
    .alu_out  (alu_out         ), // output
-   .zero_flag(zero_flag       ),
+   .zero_flag(                ),
    .overflow (                )
-);
-
-branch_unit#(
-   .DATA_W(64)
-)branch_unit(
-   .updated_pc         (updated_pc_EXE ),
-   .immediate_extended (immediate_extended_EXE),
-   .branch_pc          (branch_pc         ), // output
-   .jump_pc            (jump_pc           )
 );
 
 forwarding_unit forw_u(
@@ -329,36 +329,6 @@ forwarding_unit forw_u(
 );
 
 // EXE_MEM Pipeline signals
-
-reg_arstn_en#(
-   .DATA_W(64) // width of the forwarded signal
-)signal_pipe_EXE_MEM_branch_pc(
-   .clk      (clk           ),
-   .arst_n   (arst_n        ),
-   .din      (branch_pc     ),
-   .en       (enable        ),
-   .dout     (branch_pc_MEM )
-);
-
-reg_arstn_en#(
-   .DATA_W(64) // width of the forwarded signal
-)signal_pipe_EXE_MEM_jump_pc(
-   .clk      (clk           ),
-   .arst_n   (arst_n        ),
-   .din      (jump_pc       ),
-   .en       (enable        ),
-   .dout     (jump_pc_MEM   )
-);
-
-reg_arstn_en#(
-   .DATA_W(1) // width of the forwarded signal
-)signal_pipe_EXE_MEM_zero_pc(
-   .clk      (clk           ),
-   .arst_n   (arst_n        ),
-   .din      (zero_flag     ),
-   .en       (enable        ),
-   .dout     (zero_flag_MEM )
-);
 
 reg_arstn_en#(
    .DATA_W(64) // width of the forwarded signal
