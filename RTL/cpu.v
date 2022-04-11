@@ -72,6 +72,9 @@ wire [63:0] alu_out_MEM,alu_out_WB;
 
 wire [63:0] mem_data_WB;
 
+// Hazard unit wires
+wire       PCWrite, IF_ID_Write, stall_sel;
+
 
 
 // IF STAGE
@@ -135,6 +138,16 @@ reg_arstn_en#(
 
 // ID STAGE
 // -----------------------------------------------------------
+
+hazard_unit hazard_unit(
+   .instruction_ID  (instruction_ID),
+   .instruction_EXE (instruction_EXE),
+   .MemRead_EXE     (control_signals_EXE[4]),
+   .MemRead_ID      (control_signals_ID[4]),
+   .PCWrite         (PCWrite),
+   .IF_ID_Write     (IF_ID_Write),
+   .stall_sel       (stall_sel)
+);
 
 control_unit control_unit(
    .opcode   (instruction_ID[6:0]),
