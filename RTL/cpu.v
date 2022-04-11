@@ -58,7 +58,7 @@ wire [63:0] jump_pc;
 wire [9:0]  control_signals_MEM,control_signals_WB,control_signals_EXE, control_signals_ID;
 
 // Instructions
-wire [31:0] instruction,instruction_ID,instruction_WB,instruction_EXE,instruction_MEM;
+wire [31:0] instruction,instruction_ID,instruction_WB,instruction_EXE,instruction_MEM, instruction_ID_out;
 
 // Immediate
 wire signed [63:0] immediate_extended,immediate_extended_EXE;
@@ -80,10 +80,11 @@ wire       PCWrite, IF_ID_Write, stall_sel;
 // IF STAGE
 // -----------------------------------------------------------
 
-reg IF_ID_enable;
+reg IF_ID_enable, flush;
 
 always@(*) begin
-	assign IF_ID_enable = (IF_ID_Write & ~(zero_flag & (control_signals_ID[3] | control_signals_ID[9])));
+	assign flush = ~(zero_flag & (control_signals_ID[3] | control_signals_ID[9]));
+	assign IF_ID_enable = (IF_ID_Write & flush);
 end
 
 // Program counter
@@ -95,8 +96,8 @@ pc #(
    .branch_pc (branch_pc),
    .jump_pc   (jump_pc),
    .zero_flag (zero_flag),
-   .branch    (control_signals_MEM[3]),
-   .jump      (control_signals_MEM[9]),
+   .branch    (control_signals_ID[3]),
+   .jump      (control_signals_ID[9]),
    .current_pc(current_pc), // output
    .enable    (enable   ),
    .PCWrite   (PCWrite  ),
@@ -123,13 +124,22 @@ sram_BW32 #(
 
 // IF_ID Pipeline registers
 
+mux_2 #(
+   .DATA_W(32)
+) instruction_ID_mux (
+   .input_a (instruction),
+   .input_b (32'b0),
+   .select_a(flush ),
+   .mux_out (instruction_ID_out) // output
+);
+
 reg_arstn_en#(
    .DATA_W(32) // width of the forwarded signal
 )signal_pipe_IF_ID_instruction(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
-   .din      (instruction   ),
-   .en       (IF_ID_enable  ),
+   .din      (instruction_ID_out),
+   .en       (IF_ID_Write  ),
    .dout     (instruction_ID)
 );
 
@@ -139,8 +149,8 @@ reg_arstn_en#(
    .clk      (clk           ),
    .arst_n   (arst_n        ),
    .din      (updated_pc    ),
-   .en       (IF_ID_enable  ),
-   .dout     (updated_pc_ID )
+   .en       (IF_ID_Write  ),
+   .dout     (updated_pc_ID)
 );
 
 // ID STAGE
