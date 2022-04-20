@@ -80,12 +80,12 @@ wire       PCWrite, IF_ID_Write, stall_sel;
 // IF STAGE
 // -----------------------------------------------------------
 
-reg IF_ID_enable, flush;
+wire IF_ID_enable, flush;
 
-always@(*) begin
+//always@(*) begin
 	assign flush = ~(zero_flag & (control_signals_ID[3] | control_signals_ID[9]));
 	assign IF_ID_enable = (IF_ID_Write & flush);
-end
+//end
 
 // Program counter
 pc #(
